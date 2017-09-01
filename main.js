@@ -7,6 +7,8 @@ import {
   View,
   ListView, Image
 } from 'react-native';
+import moment from 'moment';
+
 //API: 
 export default class Lab1Tumblr extends Component {
     constructor(props){
@@ -31,18 +33,26 @@ export default class Lab1Tumblr extends Component {
 
     _renderRow(rowData){
         var url = ""
+        var tags = ""
+        var timeAgo = moment(rowData.date,"YYYY-MM-DD").fromNow();
+
         if(rowData.photos == undefined){
             console.log('data','empty')
         } else {
             console.log('data', rowData.photos[0].alt_sizes[0].url)  
             url = rowData.photos[0].alt_sizes[0].url
         }
+        for(var temp in rowData.tags){
+            tags+= "#"+rowData.tags[temp];
+        }
         
         return (
-            <View >
+            <View style={{flex:1}}>
                 { url !== "" && <Image style={{flex:1,height:300}}
                     source={{uri: url}} /> }
-                <Text >{rowData.slug}</Text>
+                <Text >{rowData.summary }</Text>
+                <Text >{tags}</Text>
+                <Text style={{ alignSelf:'flex-end'}}>{timeAgo}</Text>
                 <View style={{backgroundColor:'red',height:1,marginTop:5}}></View>
             </View>
         )
