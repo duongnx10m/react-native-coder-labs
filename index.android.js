@@ -8,7 +8,7 @@
 import {
   AppRegistry
 } from 'react-native';
-import Lab1Tumblr from './main';
+import Lab1Flick from './main';
 
 
-AppRegistry.registerComponent('Lab1Tumblr', () => Lab1Tumblr);
+AppRegistry.registerComponent('Lab1Tumblr', () => Lab1Flick);
