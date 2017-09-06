@@ -5,7 +5,7 @@ import {
   ActivityIndicator, 
   Text,
   View,
-  ListView, Image
+  ListView, Image, RefreshControl
 } from 'react-native';
 import moment from 'moment';
 
@@ -16,6 +16,7 @@ export default class Lab1Flick extends Component {
         const ds = new ListView.DataSource({rowHasChanged: (r1,r2)=>r1!==r2});
         this.state = {
             dataSource: ds.cloneWithRows([]),
+            refreshing: false,
         };
         this._getMoviesFromApiAsync();
     }
@@ -26,6 +27,10 @@ export default class Lab1Flick extends Component {
                 dataSource={this.state.dataSource}
                 enableEmptySections={true}
                 renderRow={(rowData)=>this._renderRow(rowData)}
+                refreshControl={
+                    <RefreshControl refreshing={this.state.refreshing}
+                        onRefresh={this._onRefresh.bind(this)}/>
+                }
             />
         );
     }
@@ -40,6 +45,12 @@ export default class Lab1Flick extends Component {
             }).catch((error)=>{
                 console.error(error);
             });
+    }
+    _onRefresh(){
+        this.setState({refreshing:true});
+        this._getMoviesFromApiAsync().then(()=>{
+            this.setState({refreshing:false});
+        });
     }
     _renderRow(rowData){
         var url = "http://image.tmdb.org/t/p/w185"+rowData.poster_path;
